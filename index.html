@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Meu Diário & Cantinho Criativo ✨</title>
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #ffd1dc 0%, #e0c3fc 100%);
+            min-height: 100vh;
+            padding: 20px;
+            color: #4a4a4a;
+        }
+
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        header h1 {
+            color: #d63384;
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+
+        header p {
+            color: #6c757d;
+            font-style: italic;
+        }
+
+        .container {
+            max-width: 900px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            backdrop-filter: blur(5px);
+        }
+
+        .card h2 {
+            color: #b5179e;
+            font-size: 1.4rem;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        /* Seção do Diário */
+        textarea {
+            width: 100%;
+            height: 120px;
+            border: 2px solid #f8c8dc;
+            border-radius: 12px;
+            padding: 12px;
+            resize: none;
+            outline: none;
+            font-size: 1rem;
+            transition: 0.3s;
+        }
+
+        textarea:focus {
+            border-color: #b5179e;
+        }
+
+        button {
+            background: linear-gradient(45deg, #ff85a2, #b5179e);
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 12px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+            width: 100%;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(181, 23, 158, 0.3);
+        }
+
+        .notes-list {
+            margin-top: 20px;
+            max-height: 200px;
+            overflow-y: auto;
+        }
+
+        .note-item {
+            background: #fff0f5;
+            padding: 10px 15px;
+            border-radius: 10px;
+            margin-bottom: 10px;
+            border-left: 4px solid #ff85a2;
+            font-size: 0.95rem;
+        }
+
+        .note-date {
+            font-size: 0.75rem;
+            color: #888;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        /* Seção de Hábitos / Metas */
+        .habit-input-group {
+            display: flex;
+            gap: 10px;
+        }
+
+        .habit-input-group input {
+            flex: 1;
+            padding: 10px;
+            border: 2px solid #f8c8dc;
+            border-radius: 12px;
+            outline: none;
+        }
+
+        .habit-input-group button {
+            width: auto;
+            margin-top: 0;
+        }
+
+        .habit-list {
+            list-style: none;
+            margin-top: 15px;
+        }
+
+        .habit-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .habit-item input[type="checkbox"] {
+            accent-color: #b5179e;
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+
+        /* Gerador de Frases Motivacionais */
+        .quote-box {
+            text-align: center;
+            padding: 15px;
+            background: #f7d6e0;
+            border-radius: 15px;
+            margin-top: 10px;
+        }
+
+        .quote-text {
+            font-style: italic;
+            font-weight: 500;
+            color: #7209b7;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>✨ Meu Cantinho Especial ✨</h1>
+        <p>Organize o teu dia, regista os teus pensamentos e brilha!</p>
+    </header>
+
+    <div class="container">
+        
+        <!-- Cartão 1: Diário Secreto -->
+        <div class="card">
+            <h2>📖 Meu Diário</h2>
+            <textarea id="noteInput" placeholder="Como foi o teu dia hoje? Escreve aqui..."></textarea>
+            <button onclick="addNote()">Guardar Pensamento 💕</button>
+            
+            <div class="notes-list" id="notesList"></div>
+        </div>
+
+        <!-- Cartão 2: Metas & Hábitos -->
+        <div class="card">
+            <h2>🌸 Minhas Metas de Hoje</h2>
+            <div class="habit-input-group">
+                <input type="text" id="habitInput" placeholder="Ex: Beber água, ler 5 pág...">
+                <button onclick="addHabit()">+</button>
+            </div>
+
+            <ul class="habit-list" id="habitList"></ul>
+        </div>
+
+        <!-- Cartão 3: Frase Inspiradora (Ocupa a largura total abaixo) -->
+        <div class="card" style="grid-column: 1 / -1;">
+            <h2>💖 Inspiração do Dia</h2>
+            <div class="quote-box">
+                <p class="quote-text" id="quoteText">"Acredita no teu potencial e voa alto!"</p>
+            </div>
+            <button onclick="newQuote()" style="margin-top: 15px;">Nova Frase ✨</button>
+        </div>
+
+    </div>
+
+    <script>
+        // --- FRASES MOTIVACIONAIS ---
+        const quotes = [
+            "\"Acredita no teu potencial e voa alto! 🦋\"",
+            "\"És mais forte e capaz do que imaginas. 💪✨\"",
+            "\"Pequenos passos todos os dias levam a grandes conquistas. 🌸\"",
+            "\"Nunca percas o teu brilho único! 🌟\"",
+            "\"Hoje é um ótimo dia para aprender algo novo! 📚💕\""
+        ];
+
+        function newQuote() {
+            const randomIndex = Math.floor(Math.random() * quotes.length);
+            document.getElementById('quoteText').innerText = quotes[randomIndex];
+        }
+
+        // --- DIÁRIO ---
+        function loadNotes() {
+            const notes = JSON.parse(localStorage.getItem('myNotes')) || [];
+            const notesList = document.getElementById('notesList');
+            notesList.innerHTML = '';
+            
+            notes.forEach(note => {
+                const noteDiv = document.createElement('div');
+                noteDiv.className = 'note-item';
+                noteDiv.innerHTML = `<span class="note-date">${note.date}</span>${note.text}`;
+                notesList.prepend(noteDiv);
+            });
+        }
+
+        function addNote() {
+            const input = document.getElementById('noteInput');
+            if (!input.value.trim()) return;
+
+            const notes = JSON.parse(localStorage.getItem('myNotes')) || [];
+            const newNote = {
+                text: input.value,
+                date: new Date().toLocaleString('pt-PT')
+            };
+
+            notes.push(newNote);
+            localStorage.setItem('myNotes', JSON.stringify(notes));
+            input.value = '';
+            loadNotes();
+        }
+
+        // --- HÁBITOS / METAS ---
+        function loadHabits() {
+            const habits = JSON.parse(localStorage.getItem('myHabits')) || [];
+            const habitList = document.getElementById('habitList');
+            habitList.innerHTML = '';
+
+            habits.forEach((habit, index) => {
+                const li = document.createElement('li');
+                li.className = 'habit-item';
+                li.innerHTML = `
+                    <input type="checkbox" ${habit.done ? 'checked' : ''} onchange="toggleHabit(${index})">
+                    <span style="${habit.done ? 'text-decoration: line-through; color: #aaa;' : ''}">${habit.text}</span>
+                `;
+                habitList.appendChild(li);
+            });
+        }
+
+        function addHabit() {
+            const input = document.getElementById('habitInput');
+            if (!input.value.trim()) return;
+
+            const habits = JSON.parse(localStorage.getItem('myHabits')) || [];
+            habits.push({ text: input.value, done: false });
+            localStorage.setItem('myHabits', JSON.stringify(habits));
+            input.value = '';
+            loadHabits();
+        }
+
+        function toggleHabit(index) {
+            const habits = JSON.parse(localStorage.getItem('myHabits')) || [];
+            habits[index].done = !habits[index].done;
+            localStorage.setItem('myHabits', JSON.stringify(habits));
+            loadHabits();
+        }
+
+        // Carregar dados salvos ao abrir a página
+        window.onload = function() {
+            loadNotes();
+            loadHabits();
+        };
+    </script>
+</body>
+</html>
